@@ -61,7 +61,10 @@ const MuxVideo = muxReactNativeVideo(Video);
       video_title: 'My awesome video',
     },
   }}
-/> 
+/>
 ```
 
+## Caveats
+
+Upscale and downscale % metrics are not calculated for HLS sources because of https://github.com/react-native-community/react-native-video/issues/1194.
 
