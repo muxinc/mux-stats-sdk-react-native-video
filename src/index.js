@@ -1,5 +1,6 @@
 import mux from 'mux-embed';
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState } from 'react';
+console.log('debug React.version lib:', React.version);
 // const log = mux.log;
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
@@ -8,20 +9,20 @@ const getComputedStyle = mux.utils.getComputedStyle; // If necessary to get
 const extractHostname = mux.utils.extractHostname;
 */
 
-const MIN_REBUFFER_DURATION = 300 // this should be more than 250 because getPlayheadTime will only update every 250ms
+const MIN_REBUFFER_DURATION = 300; // this should be more than 250 because getPlayheadTime will only update every 250ms
 
 const noop = function () { };
 
 // Helper function to generate "unique" IDs for the player if your player does not have one built in
-const generateShortId = function() {
+const generateShortId = function () {
   return ('000000' + ((Math.random() * Math.pow(36, 6)) << 0).toString(36)) // eslint-disable-line no-bitwise
     .slice(-6);
 };
 
 /*
- *  I was planning to save the currentTime state in the components
+ *  I wanted planning to save the playerState in the component's
  *  React state with `setState`. That does not work because the
- *  onProgress event fires too frequently that calling setState() inside
+ *  onProgress event fires so frequently that calling setState() inside
  *  of that callback results in this error: React Native: Maximum update depth exceeded
 */
 const playerState = {};
@@ -29,11 +30,11 @@ const playerState = {};
 const saveStateForPlayer = (playerID, key, value) => {
   playerState[playerID] = playerState[playerID] || {};
   playerState[playerID][key] = value;
-}
+};
 
 const getStateForPlayer = (playerID, key, value) => {
   return playerState[playerID] && playerState[playerID][key];
-}
+};
 
 export default (WrappedComponent) => {
   return ({
@@ -54,8 +55,8 @@ export default (WrappedComponent) => {
       progressUpdateInterval = 250;
     }
 
-    const [state, setState] = useState({playerID: null});
-    const {playerID} = state;
+    const [state, setState] = useState({ playerID: null });
+    const { playerID } = state;
 
     const emit = (eventType, data) => {
       console.log('debug mux.emit', eventType);
@@ -71,12 +72,12 @@ export default (WrappedComponent) => {
     const _onEnd = evt => {
       emit('ended');
       onEnd(evt);
-    }
+    };
 
     const _onSeek = evt => {
       emit('seeked');
       onSeek(evt);
-    }
+    };
 
     const _onLoad = evt => {
       console.log('debug onLoad', evt);
@@ -84,11 +85,12 @@ export default (WrappedComponent) => {
         saveStateForPlayer(playerID, 'duration', secondsToMs(evt.duration));
       }
       onLoad(evt);
-    }
+    };
 
     const _onPlaybackRateChange = evt => {
       const lastRate = getStateForPlayer(playerID, 'lastRateChange');
       const newRate = evt.playbackRate;
+
       if (lastRate === newRate) {
         console.log('debug rate did not change', lastRate, newRate);
         onPlaybackRateChange(evt);
@@ -103,20 +105,20 @@ export default (WrappedComponent) => {
         emit('playing');
       }
       onPlaybackRateChange(evt);
-    }
+    };
 
     const _onFullscreenPlayerDidPresent = evt => {
       saveStateForPlayer(playerID, 'isFullscreen', true);
       onFullscreenPlayerDidPresent(evt);
-    }
+    };
 
     const _onFullscreenPlayerDidDismiss = evt => {
       saveStateForPlayer(playerID, 'isFullscreen', false);
       onFullscreenPlayerDidDismiss(evt);
-    }
+    };
 
     useEffect(() => {
-      setState({...state, playerID: generateShortId()});
+      setState({ ...state, playerID: generateShortId() });
     }, []);
 
     useEffect(() => {
@@ -132,10 +134,10 @@ export default (WrappedComponent) => {
           player_software_name: 'React native video',
           player_is_paused: getStateForPlayer(playerID, 'isPaused'),
           // player_software_version: player.constructor.version, // TODO
-          player_mux_plugin_name: 'react-native-video-mux',
+          player_mux_plugin_name: 'react-native-video-mux'
           // player_mux_plugin_version: '[AIV]{version}[/AIV]' // TODO
         },
-        options.data,
+        options.data
       );
 
       options.getStateData = function () {
@@ -158,7 +160,7 @@ export default (WrappedComponent) => {
           video_source_duration: getStateForPlayer(playerID, 'duration'),
 
           // Optional properties - if you have them, send them, but if not, no big deal
-          video_poster_url: otherProps.poster,
+          video_poster_url: otherProps.poster
           // player_language_code: getVideoElementProp('lang') // Return the language code (e.g. `en`, `en-us`)
         };
       };
