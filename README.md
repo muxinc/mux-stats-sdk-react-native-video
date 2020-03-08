@@ -30,7 +30,7 @@ This package works by wrapping your `Video` component in a higher order componen
 For more information about what keys can be passed into the `data` key in the `muxOptions` prop see
 [the javascript docs](https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata).
 
-```javascript
+```jsx
 // import Video from react-native-video like your normally would
 import Video from 'react-native-video';
 import muxReactNativeVideo from 'mux-react-native-video-sdk';
