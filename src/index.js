@@ -1,13 +1,8 @@
 import mux from 'mux-embed';
 import React, { useEffect, useState } from 'react';
-console.log('debug React.version lib:', React.version);
-// const log = mux.log;
+import lib from '../package.json';
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
-/*
-const getComputedStyle = mux.utils.getComputedStyle; // If necessary to get
-const extractHostname = mux.utils.extractHostname;
-*/
 
 const MIN_REBUFFER_DURATION = 300; // this should be more than 250 because getPlayheadTime will only update every 250ms
 
@@ -59,7 +54,6 @@ export default (WrappedComponent) => {
     const { playerID } = state;
 
     const emit = (eventType, data) => {
-      console.log('debug mux.emit', eventType);
       mux.emit(playerID, eventType, data);
     };
 
@@ -84,6 +78,21 @@ export default (WrappedComponent) => {
       if (evt.duration) {
         saveStateForPlayer(playerID, 'duration', secondsToMs(evt.duration));
       }
+      if (evt.naturalSize) {
+        //
+        // You may be wondering why we're comparing this value to the string 'undefined' instead
+        // of the value 'undefined'. Glad you asked. This is not a typeo, it turns out that sometimes,
+        // infact the value is the string 'undefined'
+        //
+        // https://github.com/react-native-community/react-native-video/issues/1194
+        //
+        if (evt.naturalSize.width && evt.naturalSize.width !== 'undefined') {
+          saveStateForPlayer(playerID, 'sourceWidth', evt.naturalSize.width);
+        }
+        if (evt.naturalSize.height && evt.naturalSize.height !== 'undefined') {
+          saveStateForPlayer(playerID, 'sourceHeight', evt.naturalSize.height);
+        }
+      }
       onLoad(evt);
     };
 
@@ -92,7 +101,6 @@ export default (WrappedComponent) => {
       const newRate = evt.playbackRate;
 
       if (lastRate === newRate) {
-        console.log('debug rate did not change', lastRate, newRate);
         onPlaybackRateChange(evt);
         return;
       }
@@ -134,8 +142,8 @@ export default (WrappedComponent) => {
           player_software_name: 'React native video',
           player_is_paused: getStateForPlayer(playerID, 'isPaused'),
           // player_software_version: player.constructor.version, // TODO
-          player_mux_plugin_name: 'react-native-video-mux'
-          // player_mux_plugin_version: '[AIV]{version}[/AIV]' // TODO
+          player_mux_plugin_name: 'react-native-video-mux',
+          player_mux_plugin_version: lib.version
         },
         options.data
       );
@@ -145,10 +153,10 @@ export default (WrappedComponent) => {
           // Required properties - these must be provided every time this is called
           // You _should_ only provide these values if they are defined (i.e. not 'undefined')
           player_is_paused: getStateForPlayer(playerID, 'isPaused'),
-          // player_width: getVideoElDimension('width'),
-          // player_height: getVideoElDimension('height'),
-          // video_source_height: player.getStats().height,
-          // video_source_width: player.getStats().width,
+          // player_width: getStateForPlayer(playerID, 'playerWidth'),
+          // player_height: getStateForPlayer(playerID, 'playerHeight'),
+          video_source_height: getStateForPlayer(playerID, 'sourceWidth'),
+          video_source_width: getStateForPlayer(playerID, 'sourceHeight'),
 
           // Preferred properties - these should be provided in this callback if possible
           // If any are missing, that is okay, but this will be a lack of data for the customer at a later time
@@ -168,6 +176,10 @@ export default (WrappedComponent) => {
       mux.init(playerID, options);
       if (!otherProps.paused) {
         emit('play');
+      }
+      return () => {
+        mux.emit(playerID, 'destroy');
+        delete playerState.playerID
       }
     }, [playerID]);
 
