@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {createRef, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,24 +17,18 @@ import {
   Button,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-// import Video from 'react-native-video';
-// import muxReactNativeVideo from 'mux-react-native-video-sdk';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Video from 'react-native-video';
+import muxReactNativeVideo from 'mux-react-native-video-sdk';
 
-// const MuxVideo = muxReactNativeVideo(Video);
+const MuxVideo = muxReactNativeVideo(Video);
 
 const App: () => React$Node = () => {
-  const onBuffer = () => console.log('app onBuffer');
-  const videoError = () => console.log('app videoError');
   const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {}, []);
+
+  // console.log('debug window', Object.keys(window));
 
   return (
     <>
@@ -49,9 +43,12 @@ const App: () => React$Node = () => {
             </View>
           )}
           <View style={styles.body}>
-            <Button title={showVideo ? 'Hide' : 'Show'} onPress={() => setShowVideo(!showVideo)} />
-            { showVideo && <Text>Showing Video</Text>
-              /* <MuxVideo
+            <Button
+              title={showVideo ? 'Hide' : 'Show'}
+              onPress={() => setShowVideo(!showVideo)}
+            />
+            {showVideo && (
+              <MuxVideo
                 style={styles.video}
                 source={{
                   uri:
@@ -59,10 +56,8 @@ const App: () => React$Node = () => {
                 }}
                 controls
                 muted
-                onBuffer={onBuffer}
-                onError={videoError}
                 muxOptions={{
-                  debug: true,
+                  debug: false,
                   data: {
                     env_key: 'cqtqt2jfbq235huvso0djbn56',
                     player_name: 'RN Player',
@@ -70,8 +65,8 @@ const App: () => React$Node = () => {
                     video_title: 'RN testing with pause',
                   },
                 }}
-              /> */
-            }
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

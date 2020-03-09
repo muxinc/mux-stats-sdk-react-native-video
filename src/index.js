@@ -1,5 +1,5 @@
 import mux from 'mux-embed';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; // eslint-disable-line no-unused-vars
 import lib from '../package.json';
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
@@ -15,7 +15,7 @@ const generateShortId = function () {
 };
 
 /*
- *  I wanted planning to save the playerState in the component's
+ *  I wanted to save the playerState in the component's
  *  React state with `setState`. That does not work because the
  *  onProgress event fires so frequently that calling setState() inside
  *  of that callback results in this error: React Native: Maximum update depth exceeded
@@ -74,7 +74,6 @@ export default (WrappedComponent) => {
     };
 
     const _onLoad = evt => {
-      console.log('debug onLoad', evt);
       if (evt.duration) {
         saveStateForPlayer(playerID, 'duration', secondsToMs(evt.duration));
       }
@@ -178,9 +177,9 @@ export default (WrappedComponent) => {
         emit('play');
       }
       return () => {
-        mux.emit(playerID, 'destroy');
-        delete playerState.playerID
-      }
+        emit(playerID, 'destroy');
+        delete playerState.playerID;
+      };
     }, [playerID]);
 
     return (
