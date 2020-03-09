@@ -3,6 +3,8 @@
 This is a package for using [Mux Data](https://mux.com/data/) for video QoS monitoring with
 a react-native-video player.
 
+View the DemoApp/ directory to see a demo application that implements this library.
+
 ## Requirements
 
 1. A functioning react-native application that uses react-native-video.
@@ -66,5 +68,6 @@ const MuxVideo = muxReactNativeVideo(Video);
 
 ## Caveats
 
-Upscale and downscale % metrics are not calculated for HLS sources because of https://github.com/react-native-community/react-native-video/issues/1194.
+1. Upscale and downscale % metrics are not calculated for HLS sources because of this open issue: https://github.com/react-native-community/react-native-video/issues/1194.
+
 

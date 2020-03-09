@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, {createRef, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  Button,
 } from 'react-native';
 
 import {
@@ -23,8 +24,18 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+// import Video from 'react-native-video';
+// import muxReactNativeVideo from 'mux-react-native-video-sdk';
+
+// const MuxVideo = muxReactNativeVideo(Video);
 
 const App: () => React$Node = () => {
+  const onBuffer = () => console.log('app onBuffer');
+  const videoError = () => console.log('app videoError');
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {}, []);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -32,39 +43,35 @@ const App: () => React$Node = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Header />
           {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
             </View>
           )}
           <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+            <Button title={showVideo ? 'Hide' : 'Show'} onPress={() => setShowVideo(!showVideo)} />
+            { showVideo && <Text>Showing Video</Text>
+              /* <MuxVideo
+                style={styles.video}
+                source={{
+                  uri:
+                    'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+                }}
+                controls
+                muted
+                onBuffer={onBuffer}
+                onError={videoError}
+                muxOptions={{
+                  debug: true,
+                  data: {
+                    env_key: 'cqtqt2jfbq235huvso0djbn56',
+                    player_name: 'RN Player',
+                    video_id: 'My Video Id',
+                    video_title: 'RN testing with pause',
+                  },
+                }}
+              /> */
+            }
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -75,6 +82,10 @@ const App: () => React$Node = () => {
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.lighter,
+  },
+  video: {
+    width: 400,
+    height: 500,
   },
   engine: {
     position: 'absolute',
