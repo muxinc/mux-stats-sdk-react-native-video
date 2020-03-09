@@ -1,5 +1,6 @@
 import mux from 'mux-embed';
 import React, { useEffect, useState } from 'react'; // eslint-disable-line no-unused-vars
+import { Platform } from 'react-native';
 import lib from '../package.json';
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
@@ -170,6 +171,18 @@ export default (WrappedComponent) => {
           video_poster_url: otherProps.poster
           // player_language_code: getVideoElementProp('lang') // Return the language code (e.g. `en`, `en-us`)
         };
+      };
+
+      options.platform = {
+//        name:
+//        version:
+//         layout:
+//         product:
+//         manufacturer:
+        os: {
+          family: Platform.OS,
+          version: Platform.Version
+        }
       };
 
       mux.init(playerID, options);
