@@ -47,7 +47,7 @@ export default (WrappedComponent) => {
     ...otherProps
   }) => {
     if (progressUpdateInterval && progressUpdateInterval !== 250) {
-      console.warn(`[mux-react-native-video] found progressUpdateInterval value of ${progressUpdateInterval} - overriding to 250. This is required for the mux-react-native-video to correctly track rebuffering`);
+      console.log(`[mux-react-native-video] found progressUpdateInterval value of ${progressUpdateInterval} - overriding to 250. This is required for the mux-react-native-video to correctly track rebuffering`);
       progressUpdateInterval = 250;
     }
 
@@ -126,7 +126,20 @@ export default (WrappedComponent) => {
     };
 
     useEffect(() => {
-      setState({ ...state, playerID: generateShortId() });
+      const playerID = generateShortId();
+      setState({ ...state, playerID });
+      //
+      // The callback below gets called when the component is unmounted,
+      // and by that time the `state` and `state.playerID` have been cleaned
+      // up, so the `playerID` variable will be `null`. For that reason,
+      // let's cache the playerID in a local variable, `playerIDCopy` and use
+      // it to emit the 'destroy' event.
+      //
+      const playerIDCopy = playerID;
+      return () => {
+        mux.emit(playerIDCopy, 'destroy');
+        delete playerState.playerID;
+      };
     }, []);
 
     useEffect(() => {
@@ -189,10 +202,6 @@ export default (WrappedComponent) => {
       if (!otherProps.paused) {
         emit('play');
       }
-      return () => {
-        emit(playerID, 'destroy');
-        delete playerState.playerID;
-      };
     }, [playerID]);
 
     return (

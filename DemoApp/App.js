@@ -62,7 +62,7 @@ const App: () => React$Node = () => {
                     env_key: 'cqtqt2jfbq235huvso0djbn56',
                     player_name: 'RN Player',
                     video_id: 'My Video Id',
-                    video_title: 'RN testing with pause',
+                    video_title: 'RN test',
                   },
                 }}
               />
