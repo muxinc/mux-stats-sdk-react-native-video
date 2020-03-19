@@ -28,8 +28,6 @@ const App: () => React$Node = () => {
 
   useEffect(() => {}, []);
 
-  // console.log('debug window', Object.keys(window));
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -52,7 +50,7 @@ const App: () => React$Node = () => {
                 style={styles.video}
                 source={{
                   uri:
-                    'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+                    'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
                 }}
                 controls
                 muted

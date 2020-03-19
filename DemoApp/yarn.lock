@@ -4788,7 +4788,7 @@ mute-stream@0.0.8:
 "mux-react-native-video-sdk@file:..":
   version "0.1.0-beta.0"
   dependencies:
-    mux-embed "file:../../../../Library/Caches/Yarn/v6/npm-mux-react-native-video-sdk-0.1.0-beta.0-c137586d-c65e-4bfa-9235-edecb596e3b2-1583903352171/node_modules/mux-embed"
+    mux-embed "file:../../../../Library/Caches/Yarn/v6/npm-mux-react-native-video-sdk-0.1.0-beta.0-5e317f44-0694-432b-9146-09893d412059-1585608947537/node_modules/mux-embed"
 
 nan@^2.12.1:
   version "2.14.0"

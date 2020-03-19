@@ -53,13 +53,31 @@ export default (WrappedComponent) => {
 
     const [state, setState] = useState({ playerID: null });
     const { playerID } = state;
+    const didStartPaused = otherProps.paused;
 
     const emit = (eventType, data) => {
+      console.log('debug emit', eventType);
       mux.emit(playerID, eventType, data);
     };
 
+    const emitPlay = () => {
+      setPlayerStatus('play');
+      emit('play')
+    }
+
+    const setPlayerStatus = (status) => saveStateForPlayer(playerID, 'currentStatus', status);
+    const getPlayerStatus = () => getStateForPlayer(playerID, 'currentStatus');
+
     const _onProgress = evt => {
       saveStateForPlayer(playerID, 'currentTime', secondsToMs(evt.currentTime));
+      if (getPlayerStatus() === 'paused') {
+        return
+      }
+
+      if (getPlayerStatus() === 'play') {
+        setPlayerStatus('playing');
+        emit('playing');
+      }
       emit('timeupdate', { player_playhead_time: secondsToMs(evt.currentTime) });
       onProgress(evt);
     };
@@ -99,20 +117,27 @@ export default (WrappedComponent) => {
     const _onPlaybackRateChange = evt => {
       const lastRate = getStateForPlayer(playerID, 'lastRateChange');
       const newRate = evt.playbackRate;
+      const isFirstPlayAttempt = (didStartPaused && lastRate === undefined && newRate);
+      const isUnPausing = (lastRate === 0 && newRate);
+      saveStateForPlayer(playerID, 'lastRateChange', evt.playbackRate);
 
       if (lastRate === newRate) {
         onPlaybackRateChange(evt);
         return;
       }
-      saveStateForPlayer(playerID, 'lastRateChange', evt.playbackRate);
-      if (newRate === 0) {
-        saveStateForPlayer(playerID, 'isPaused', true);
-        emit('pause');
-      } else {
-        saveStateForPlayer(playerID, 'isPaused', false);
-        emit('playing');
+
+      if (isFirstPlayAttempt || isUnPausing) {
+        emitPlay();
+        onPlaybackRateChange(evt);
+        return
       }
-      onPlaybackRateChange(evt);
+
+      if (newRate === 0) {
+        emit('pause');
+        setPlayerStatus('paused');
+        onPlaybackRateChange(evt);
+        return;
+      }
     };
 
     const _onFullscreenPlayerDidPresent = evt => {
@@ -127,6 +152,7 @@ export default (WrappedComponent) => {
 
     useEffect(() => {
       const playerID = generateShortId();
+
       setState({ ...state, playerID });
       //
       // The callback below gets called when the component is unmounted,
@@ -136,6 +162,7 @@ export default (WrappedComponent) => {
       // it to emit the 'destroy' event.
       //
       const playerIDCopy = playerID;
+
       return () => {
         mux.emit(playerIDCopy, 'destroy');
         delete playerState.playerID;
@@ -187,11 +214,11 @@ export default (WrappedComponent) => {
       };
 
       options.platform = {
-//        name:
-//        version:
-//         layout:
-//         product:
-//         manufacturer:
+        //        name:
+        //        version:
+        //         layout:
+        //         product:
+        //         manufacturer:
         os: {
           family: Platform.OS,
           version: Platform.Version
@@ -199,8 +226,8 @@ export default (WrappedComponent) => {
       };
 
       mux.init(playerID, options);
-      if (!otherProps.paused) {
-        emit('play');
+      if (!didStartPaused) {
+        emitPlay();
       }
     }, [playerID]);
 
