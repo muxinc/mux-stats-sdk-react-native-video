@@ -12,5 +12,6 @@ This project was generated with `npx react-native init`
 # Setup
 
 1. `yarn install`
-1. `yarn ios` - runs the app in the ios simulator
-1. `yarn android` - runs the app in the android emulator
+1. `yarn start`- in one terminal window
+1. `yarn ios` - (new terminal window) - runs the app in the ios simulator. You will have to have XCode and simulators installed.
+1. `yarn android` - (new terminal window) - runs the app in the android emulator. You will have to have Android Studio and emulators involved
