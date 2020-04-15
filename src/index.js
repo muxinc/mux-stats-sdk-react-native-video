@@ -41,11 +41,12 @@ export default (WrappedComponent) => {
     onPlaybackRateChange = noop,
     onFullscreenPlayerDidPresent = noop,
     onFullscreenPlayerDidDismiss = noop,
-    muxOptions: options,
+    muxOptions,
     progressUpdateInterval,
     source,
     ...otherProps
   }) => {
+    const options = Object.assign({}, muxOptions);
     if (progressUpdateInterval && progressUpdateInterval !== 250) {
       console.log(`[mux-react-native-video] found progressUpdateInterval value of ${progressUpdateInterval} - overriding to 250. This is required for the mux-react-native-video to correctly track rebuffering`);
       progressUpdateInterval = 250;
@@ -56,7 +57,6 @@ export default (WrappedComponent) => {
     const didStartPaused = otherProps.paused;
 
     const emit = (eventType, data) => {
-      console.log('debug emit', eventType);
       mux.emit(playerID, eventType, data);
     };
 
@@ -176,6 +176,10 @@ export default (WrappedComponent) => {
       };
 
       options.minimumRebufferDuration = MIN_REBUFFER_DURATION;
+      const platformName = options.application_name;
+      delete options.application_name;
+      const platformVersion = options.application_version;
+      delete options.application_version;
 
       options.data = assign(
         {
@@ -214,8 +218,6 @@ export default (WrappedComponent) => {
       };
 
       options.platform = {
-        //        name:
-        //        version:
         //         layout:
         //         product:
         //         manufacturer:
@@ -224,6 +226,12 @@ export default (WrappedComponent) => {
           version: Platform.Version
         }
       };
+      if (platformName) {
+        options.platform.name = platformName;
+      }
+      if (platformVersion) {
+        options.platform.version = platformVersion;
+      }
 
       mux.init(playerID, options);
       if (!didStartPaused) {

@@ -33,6 +33,7 @@ For more information about what keys can be passed into the `data` key in the `m
 [the javascript docs](https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata).
 
 ```jsx
+import app from './package.json'
 // import Video from react-native-video like your normally would
 import Video from 'react-native-video';
 import muxReactNativeVideo from 'mux-react-native-video-sdk';
@@ -56,11 +57,14 @@ const MuxVideo = muxReactNativeVideo(Video);
   onError={handleError}
   muxOptions={{
     debug: false,
+    application_name: app.name,        // the name of your application
+    application_version: app.version,  // the version of your application
     data: {
       env_key: 'YOUR_ENVIRONMENT_KEY',
       player_name: 'React Native Player',
       video_id: 'My Video Id',
       video_title: 'My awesome video',
+      player_software_version: '5.0.2' // the version of react-native-video that you are using
     },
   }}
 />

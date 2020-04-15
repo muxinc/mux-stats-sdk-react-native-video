@@ -20,6 +20,7 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Video from 'react-native-video';
 import muxReactNativeVideo from 'mux-react-native-video-sdk';
+import app from './package.json';
 
 const MuxVideo = muxReactNativeVideo(Video);
 
@@ -56,11 +57,13 @@ const App: () => React$Node = () => {
                 muted
                 muxOptions={{
                   debug: false,
+                  application_name: app.name,
+                  application_version: app.version,
                   data: {
                     env_key: 'cqtqt2jfbq235huvso0djbn56',
-                    player_name: 'RN Player',
+                    player_name: 'San Diego player',
                     video_id: 'My Video Id',
-                    video_title: 'RN test',
+                    video_title: 'Show and tell',
                   },
                 }}
               />
