@@ -47,6 +47,9 @@ export default (WrappedComponent) => {
     ...otherProps
   }) => {
     const options = Object.assign({}, muxOptions);
+    if (!options.application_name) {
+      console.error('[mux-react-native-video] missing muxOptions.application_name - this value is required');
+    }
     if (progressUpdateInterval && progressUpdateInterval !== 250) {
       console.log(`[mux-react-native-video] found progressUpdateInterval value of ${progressUpdateInterval} - overriding to 250. This is required for the mux-react-native-video to correctly track rebuffering`);
       progressUpdateInterval = 250;

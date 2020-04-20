@@ -1,28 +1,27 @@
 # Mux Data Integration with react-native-video
 
-This is a package for using [Mux Data](https://mux.com/data/) for video QoS monitoring with
-a react-native-video player.
+This is a package for using [Mux Data](https://mux.com/data/) for video QoS monitoring with a react-native-video player. This package is in beta and we are currentling getting feedback before officially releasing this.
 
 View the DemoApp/ directory to see a demo application that implements this library.
 
 ## Requirements
 
 1. A functioning react-native application that uses react-native-video.
-1. react-native >= 16.9.0
-1. react-native-video >= 5.0.2
+1. react-native ~> 16.9
+1. react-native-video ~> 5.0.2
 
 ## Installation
 
-Install with either yarn or npm:
+Install from github in your package.json (when this is officially released then it will be availble on npm).
 
 ```
-yarn add mux-react-native-video-sdk
+yarn add https://github.com/muxinc/mux-stats-sdk-react-native-video
 ```
 
 OR
 
 ```
-npm install mux-react-native-video-sdk
+npm install https://github.com/muxinc/mux-stats-sdk-react-native-video --save
 ```
 
 ## Usage
@@ -33,18 +32,16 @@ For more information about what keys can be passed into the `data` key in the `m
 [the javascript docs](https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata).
 
 ```jsx
-import app from './package.json'
-// import Video from react-native-video like your normally would
-import Video from 'react-native-video';
+import app from './package.json' // this is your application's package.json
+import Video from 'react-native-video'; // import Video from react-native-video like your normally would
 import muxReactNativeVideo from 'mux-react-native-video-sdk';
 
 // wrap the `Video` component with Mux functionality
 const MuxVideo = muxReactNativeVideo(Video);
 
-
 // Pass the same props to `MuxVideo` that you would pass to the
-// `Video` element. All of these props will be passed through
-// add a prop for `muxOptions`
+// `Video` element. All of these props will be passed through to your underlying react-native-video component
+// Include a new prop for `muxOptions`
 <MuxVideo
   style={styles.video}
   source={{
@@ -56,15 +53,14 @@ const MuxVideo = muxReactNativeVideo(Video);
   onBuffer={handleBuffer}
   onError={handleError}
   muxOptions={{
-    debug: false,
-    application_name: app.name,        // the name of your application
-    application_version: app.version,  // the version of your application
+    application_name: app.name,            // (required) the name of your application
+    application_version: app.version,      // the version of your application (optional, but encouraged)
     data: {
-      env_key: 'YOUR_ENVIRONMENT_KEY',
-      player_name: 'React Native Player',
+      env_key: 'YOUR_ENVIRONMENT_KEY',     // (required)
+      player_software_version: '5.0.2'     // (optionaal, but encouraged) the version of react-native-video that you are using
+      player_name: 'React Native Player',  // See metadata docs for available metadata fields https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata
       video_id: 'My Video Id',
       video_title: 'My awesome video',
-      player_software_version: '5.0.2' // the version of react-native-video that you are using
     },
   }}
 />
@@ -72,6 +68,8 @@ const MuxVideo = muxReactNativeVideo(Video);
 
 ## Caveats
 
-1. Upscale and downscale % metrics are not calculated for HLS sources because of this open issue: https://github.com/react-native-community/react-native-video/issues/1194.
+1. Upscale and downscale % metrics are not calculated because we are unable to get player width and player height measurments from react-native-video.
+1. Even if we could get player width and height, we still wouldn't be able to calculate upscale and downscale % metrics for HLS sources is because of this open issue related to getting the video source width & height: https://github.com/react-native-community/react-native-video/issues/1194.
+1. This library is intended for use with react-native-video when targeting iOS and Android platforms. For targeting web platforms we have other SDKs that will work better for monitiring the HTML5 `video` element.
 
 
