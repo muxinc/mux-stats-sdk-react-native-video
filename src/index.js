@@ -72,6 +72,16 @@ export default (WrappedComponent) => {
     const getPlayerStatus = () => getStateForPlayer(playerID, 'currentStatus');
 
     const _onProgress = evt => {
+      const lastTime = getStateForPlayer(playerID, 'currentTime');
+      const currentTime = secondsToMs(evt.currentTime);
+      if (lastTime) {
+        const timeDiffMs = (currentTime - lastTime);
+        const isSeeking = (timeDiffMs < -1000) || (timeDiffMs > 1000);
+        if (isSeeking) {
+          console.log('debug we are seeking', timeDiffMs);
+          emit('seeking');
+        }
+      }
       saveStateForPlayer(playerID, 'currentTime', secondsToMs(evt.currentTime));
       if (getPlayerStatus() === 'paused') {
         return
@@ -91,6 +101,7 @@ export default (WrappedComponent) => {
     };
 
     const _onSeek = evt => {
+      console.log('debug seeked');
       emit('seeked');
       onSeek(evt);
     };
