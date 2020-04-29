@@ -50,8 +50,6 @@ const MuxVideo = muxReactNativeVideo(Video);
   }}
   controls
   muted
-  onBuffer={handleBuffer}
-  onError={handleError}
   muxOptions={{
     application_name: app.name,            // (required) the name of your application
     application_version: app.version,      // the version of your application (optional, but encouraged)
