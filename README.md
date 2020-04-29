@@ -73,5 +73,6 @@ const MuxVideo = muxReactNativeVideo(Video);
 1. This library is intended for use with react-native-video when targeting iOS and Android platforms. For targeting web platforms we have other SDKs that will work better for monitiring the HTML5 `video` element.
 1. If you are overriding react-native-video's default of 250ms for `progressUpdateInterval` this library will: (1) ignore your setting and revert back to 250ms (2) log a warning. This library depends on a progressUpdateInterval of 250ms in order to correctly calculate rebuffering
 1. 'Seeking' events are not tracked by this SDK because of inconsistent `onSeek` callback behavior between iOS and Android: https://github.com/react-native-community/react-native-video/issues/1977
+1. The `paused` property does not behave as expected on Android when using the default player controls. (the `onProgress` event, which is something the Mux SDK needs to hook into does not fire): https://github.com/react-native-community/react-native-video/issues/1979. If you are using the `paused` property it will work on iOS with the default controls but if you need to use it on Android you will have to implement your own controls and set/unset the `paused` property yourself.
 
 
