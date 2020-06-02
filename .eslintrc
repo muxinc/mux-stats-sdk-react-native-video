@@ -1,0 +1,9 @@
+{
+  "extends": ["standard"],
+
+  "rules": {
+    "semi": [2, "always"],
+    "camelcase": [0, { "properties": "never" }],
+    "newline-after-var": [2, "always"]
+  }
+}
