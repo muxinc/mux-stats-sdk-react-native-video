@@ -16,7 +16,7 @@
     "eslint-plugin-standard": "^4.0.1"
   },
   "dependencies": {
-    "mux-embed": "file:../mux-embed"
+    "mux-embed": "^3.2"
   },
   "peerDependencies": {
     "react": ">= 16.9.0",
