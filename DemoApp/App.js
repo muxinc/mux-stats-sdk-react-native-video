@@ -43,7 +43,7 @@ const App: () => React$Node = () => {
           )}
           <View style={styles.body}>
             <Button
-              title={showVideo ? 'Hide' : 'Show'}
+              title={showVideo ? 'Hide Player' : 'Show Player'}
               onPress={() => setShowVideo(!showVideo)}
             />
             {showVideo && (
@@ -56,14 +56,14 @@ const App: () => React$Node = () => {
                 controls
                 muted
                 muxOptions={{
-                  debug: false,
+                  debug: true,
                   application_name: app.name,
                   application_version: app.version,
                   data: {
                     env_key: 'cqtqt2jfbq235huvso0djbn56',
-                    player_name: 'San Diego player',
-                    video_id: 'My Video Id',
-                    video_title: 'Show and tell',
+                    player_name: 'Test player',
+                    video_id: 'video-id-1',
+                    video_title: 'Big buck bunny',
                   },
                 }}
               />
