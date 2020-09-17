@@ -33,7 +33,7 @@ const getStateForPlayer = (playerID, key, value) => {
 };
 
 export default (WrappedComponent) => {
-  return ({
+  return React.forwardRef(({
     onProgress = noop,
     onEnd = noop,
     onSeek = noop,
@@ -45,7 +45,7 @@ export default (WrappedComponent) => {
     progressUpdateInterval,
     source,
     ...otherProps
-  }) => {
+  }, ref) => {
     const options = Object.assign({}, muxOptions);
     if (!options.application_name) {
       console.error('[mux-react-native-video] missing muxOptions.application_name - this value is required');
@@ -253,8 +253,9 @@ export default (WrappedComponent) => {
         onFullscreenPlayerDidPresent={_onFullscreenPlayerDidPresent}
         onFullscreenPlayerDidDismiss={_onFullscreenPlayerDidDismiss}
         source={source}
+        ref={ref}
         {...otherProps}
       />
     );
-  };
+  });
 };
