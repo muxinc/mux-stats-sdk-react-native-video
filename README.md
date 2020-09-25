@@ -15,13 +15,13 @@ View the DemoApp/ directory to see a demo application that implements this libra
 Install from github in your package.json (when this is officially released then it will be availble on npm).
 
 ```
-yarn add https://github.com/muxinc/mux-stats-sdk-react-native-video
+yarn add https://github.com/muxinc/mux-stats-sdk-react-native-video#v0.1.0-beta.1
 ```
 
 OR
 
 ```
-npm install https://github.com/muxinc/mux-stats-sdk-react-native-video --save
+npm install https://github.com/muxinc/mux-stats-sdk-react-native-video#v0.1.0-beta.1 --save
 ```
 
 ## Usage
