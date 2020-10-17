@@ -6,6 +6,7 @@ const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
 
 const MIN_REBUFFER_DURATION = 300; // this should be more than 250 because getPlayheadTime will only update every 250ms
+const PROG_UPDATE_INTERVAL = 250; // This is required for the mux-react-native-video to correctly track rebuffering
 
 const noop = function () { };
 
@@ -50,14 +51,11 @@ export default (WrappedComponent) => {
     if (!options.application_name) {
       console.error('[mux-react-native-video] missing muxOptions.application_name - this value is required');
     }
-    if (progressUpdateInterval && progressUpdateInterval !== 250) {
-      console.log(`[mux-react-native-video] found progressUpdateInterval value of ${progressUpdateInterval} - overriding to 250. This is required for the mux-react-native-video to correctly track rebuffering`);
-      progressUpdateInterval = 250;
-    }
 
     const [state, setState] = useState({ playerID: null });
     const { playerID } = state;
     const didStartPaused = otherProps.paused;
+    const [lastOnProgessUpdateTs, setLastOnProgressUpdateTs] = useState(0);
 
     const emit = (eventType, data) => {
       mux.emit(playerID, eventType, data);
@@ -82,7 +80,12 @@ export default (WrappedComponent) => {
         emit('playing');
       }
       emit('timeupdate', { player_playhead_time: secondsToMs(evt.currentTime) });
-      onProgress(evt);
+      
+      let currentTs = new Date().getTime();
+      if (currentTs >=  lastOnProgessUpdateTs + (progressUpdateInterval || PROG_UPDATE_INTERVAL)) {
+        setLastOnProgressUpdateTs(currentTs);
+        onProgress(evt);
+      }
     };
 
     const _onEnd = evt => {
@@ -172,6 +175,7 @@ export default (WrappedComponent) => {
       };
     }, []);
 
+
     useEffect(() => {
       if (!playerID) return;
       options.getPlayheadTime = () => {
@@ -249,7 +253,7 @@ export default (WrappedComponent) => {
         onSeek={_onSeek}
         onLoad={_onLoad}
         onPlaybackRateChange={_onPlaybackRateChange}
-        progressUpdateInterval={progressUpdateInterval}
+        progressUpdateInterval={PROG_UPDATE_INTERVAL}
         onFullscreenPlayerDidPresent={_onFullscreenPlayerDidPresent}
         onFullscreenPlayerDidDismiss={_onFullscreenPlayerDidDismiss}
         source={source}
