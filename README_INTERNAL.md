@@ -7,5 +7,5 @@
 1. Pull master, tag master with your new version `git tag v0.1.0-beta.1`
 1. Push tags `git push origin --tags`
 
-For now, usere can install from Github. When this gets further along
+For now, users can install from Github. When this gets further along
 and closer to non-beta release then we will release to NPM

@@ -15,13 +15,13 @@ View the DemoApp/ directory to see a demo application that implements this libra
 Install from github in your package.json (when this is officially released then it will be availble on npm).
 
 ```
-yarn add "https://github.com/muxinc/mux-stats-sdk-react-native-video#v0.1.0-beta.1"
+yarn add "https://github.com/muxinc/mux-stats-sdk-react-native-video#v0.1.0"
 ```
 
 OR
 
 ```
-npm install "https://github.com/muxinc/mux-stats-sdk-react-native-video#v0.1.0-beta.1" --save
+npm install "https://github.com/muxinc/mux-stats-sdk-react-native-video#v0.1.0" --save
 ```
 
 ## Usage
@@ -75,5 +75,3 @@ const MuxVideo = muxReactNativeVideo(Video);
 1. This library is intended for use with react-native-video when targeting iOS and Android platforms. For targeting web platforms we have other SDKs that will work better for monitiring the HTML5 `video` element.
 1. If you are overriding react-native-video's default of 250ms for `progressUpdateInterval` this library will: (1) ignore your setting and revert back to 250ms (2) log a warning. This library depends on a progressUpdateInterval of 250ms in order to correctly calculate rebuffering
 1. 'Seeking' events are not tracked by this SDK because of inconsistent `onSeek` callback behavior between iOS and Android: https://github.com/react-native-community/react-native-video/issues/1977
-
-
