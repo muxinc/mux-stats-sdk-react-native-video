@@ -1,8 +1,10 @@
 {
   "name": "mux-react-native-video-sdk",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0",
   "author": "Mux, Inc.",
   "description": "Mux analytics plugin for react-native-video",
+  "homepage": "https://github.com/muxinc/mux-stats-sdk-react-native-video",
+  "license": "MIT",
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint 'src/*.js' --quiet"
@@ -16,7 +18,7 @@
     "eslint-plugin-standard": "^4.0.1"
   },
   "dependencies": {
-    "mux-embed": "^3.2"
+    "mux-embed": "^3.4"
   },
   "peerDependencies": {
     "react": "^16.9",
