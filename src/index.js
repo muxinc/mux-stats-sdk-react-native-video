@@ -200,8 +200,8 @@ export default (WrappedComponent) => {
           // Required properties - these must be provided every time this is called
           // You _should_ only provide these values if they are defined (i.e. not 'undefined')
           player_is_paused: getStateForPlayer(playerID, 'isPaused'),
-          // player_width: getStateForPlayer(playerID, 'playerWidth'),
-          // player_height: getStateForPlayer(playerID, 'playerHeight'),
+          player_width: getStateForPlayer(playerID, 'playerWidth'),
+          player_height: getStateForPlayer(playerID, 'playerHeight'),
           video_source_height: getStateForPlayer(playerID, 'sourceWidth'),
           video_source_width: getStateForPlayer(playerID, 'sourceHeight'),
 
