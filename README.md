@@ -59,9 +59,6 @@ const MuxVideo = muxReactNativeVideo(Video);
       player_name: 'React Native Player',  // See metadata docs for available metadata fields https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata
       video_id: 'My Video Id',
       video_title: 'My awesome video',
-      // Get these from onLayout(event) callback of the parent View -> event.nativeEvent.layout.width
-      player_width: playerWidth,
-      player_height: playerHeight,
     },
   }}
 />
@@ -74,7 +71,8 @@ const MuxVideo = muxReactNativeVideo(Video);
 
 ## Caveats
 
-1. If we get player width and height, we still won't be able to calculate upscale and downscale % metrics for HLS sources because of this open issue related to getting the video source width & height: https://github.com/react-native-community/react-native-video/issues/1194.
+1. Upscale and downscale % metrics are not calculated because we are unable to get player width and player height measurments from react-native-video.
+1. Even if we could get player width and height, we still wouldn't be able to calculate upscale and downscale % metrics for HLS sources is because of this open issue related to getting the video source width & height: https://github.com/react-native-community/react-native-video/issues/1194.
 1. This library is intended for use with react-native-video when targeting iOS and Android platforms. For targeting web platforms we have other SDKs that will work better for monitiring the HTML5 `video` element.
 1. If you are overriding react-native-video's default of 250ms for `progressUpdateInterval` this library will: (1) ignore your setting and revert back to 250ms (2) log a warning. This library depends on a progressUpdateInterval of 250ms in order to correctly calculate rebuffering
 1. 'Seeking' events are not tracked by this SDK because of inconsistent `onSeek` callback behavior between iOS and Android: https://github.com/react-native-community/react-native-video/issues/1977

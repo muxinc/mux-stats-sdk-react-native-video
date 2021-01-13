@@ -200,8 +200,8 @@ export default (WrappedComponent) => {
           // Required properties - these must be provided every time this is called
           // You _should_ only provide these values if they are defined (i.e. not 'undefined')
           player_is_paused: getStateForPlayer(playerID, 'isPaused'),
-          player_width: getStateForPlayer(playerID, 'playerWidth'),
-          player_height: getStateForPlayer(playerID, 'playerHeight'),
+          // player_width: getStateForPlayer(playerID, 'playerWidth'),
+          // player_height: getStateForPlayer(playerID, 'playerHeight'),
           video_source_height: getStateForPlayer(playerID, 'sourceWidth'),
           video_source_width: getStateForPlayer(playerID, 'sourceHeight'),
 
@@ -241,24 +241,6 @@ export default (WrappedComponent) => {
         emitPlay();
       }
     }, [playerID]);
-    
-    useEffect(() => {
-      if (!playerID) return;
-      if (options.data.player_width) {
-        saveStateForPlayer(
-          playerID,
-          'playerWidth',
-          options.data.player_width,
-        );
-      }
-      if (options.data.player_height) {
-        saveStateForPlayer(
-          playerID,
-          'playerHeight',
-          options.data.player_height,
-        );
-      }
-    }, [playerID, options.data.player_width, options.data.player_height]);
 
     const sourceUri = source && source.uri;
     useEffect(() => {
