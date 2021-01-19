@@ -242,6 +242,27 @@ export default (WrappedComponent) => {
       }
     }, [playerID]);
 
+    const sourceUri = source && source.uri;
+    useEffect(() => {
+      if (!sourceUri || !playerID) return;
+      
+      if (!getStateForPlayer(playerID, 'sourceUri')) {
+        // do not send a videochange event for the first source
+        saveStateForPlayer(playerID, 'sourceUri', sourceUri);
+        return;
+      }
+
+      saveStateForPlayer(playerID, 'sourceUri', sourceUri);
+      emit('videochange', {
+        video_id: options.data.video_id,
+        video_title: options.data.video_title,
+        video_series: options.data.video_series,
+        video_duration: options.data.video_duration,
+        video_stream_type: options.data.video_stream_type,
+        video_encoding_variant: options.data.video_encoding_variant,
+      });
+    }, [playerID, sourceUri]);
+
     return (
       <WrappedComponent
         onProgress={_onProgress}

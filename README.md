@@ -55,7 +55,7 @@ const MuxVideo = muxReactNativeVideo(Video);
     application_version: app.version,      // the version of your application (optional, but encouraged)
     data: {
       env_key: 'YOUR_ENVIRONMENT_KEY',     // (required)
-      player_software_version: '5.0.2'     // (optionaal, but encouraged) the version of react-native-video that you are using
+      player_software_version: '5.0.2'     // (optional, but encouraged) the version of react-native-video that you are using
       player_name: 'React Native Player',  // See metadata docs for available metadata fields https://docs.mux.com/docs/web-integration-guide#section-5-add-metadata
       video_id: 'My Video Id',
       video_title: 'My awesome video',
@@ -67,6 +67,7 @@ const MuxVideo = muxReactNativeVideo(Video);
 ## Known Issues
 
 1. The `paused` property does not behave as expected on Android when using the default player controls. (the `onProgress` event, which is something the Mux SDK needs to hook into does not fire): https://github.com/react-native-community/react-native-video/issues/1979. If you are using the `paused` property it will work on iOS with the default controls but if you need to use it on Android you will have to implement your own controls and set/unset the `paused` property yourself.
+1. The `player_is_fullscreen` property is not reported as expected on iOS. The react-native-video callbacks for fullscreen status `onFullscreenPlayerDidPresent` and `onFullscreenPlayerDidDismiss` do not get called when entering fullscreen using the native controls: https://github.com/react-native-video/react-native-video/issues/552
 
 ## Caveats
 
