@@ -842,9 +842,9 @@ locate-path@^2.0.0:
     path-exists "^3.0.0"
 
 lodash@^4.17.14, lodash@^4.17.19:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 mimic-fn@^2.1.0:
   version "2.1.0"
@@ -885,10 +885,10 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mux-embed@^3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/mux-embed/-/mux-embed-3.4.2.tgz#b2206747df580082d5a367af867eb94c2b68e972"
-  integrity sha512-LBeK2lyZ0fzOxghxA4TQYmw6WyEBJmx4iELkwJa6lgmgwPmkD+qP3yZVNN0DAgKuyqXwyaPx9cj7e6O7LBEPRA==
+mux-embed@^3.4:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/mux-embed/-/mux-embed-3.5.0.tgz#3bbadfe66a8e9ae81ed20b2fe8b0466194bb8d19"
+  integrity sha512-RjkWhps4PH2sKPHlPtUkgU5IUwqFRMlYtBNgQYw6ud5Jf2SCBnYElKW2iZCBEApeSHj+v0n7RP/bkWFKMhSNTg==
 
 natural-compare@^1.4.0:
   version "1.4.0"
