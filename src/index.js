@@ -41,6 +41,7 @@ export default (WrappedComponent) => {
     onPlaybackRateChange = noop,
     onFullscreenPlayerDidPresent = noop,
     onFullscreenPlayerDidDismiss = noop,
+    onPlayerIdReady = noop,
     muxOptions,
     progressUpdateInterval,
     source,
@@ -157,6 +158,8 @@ export default (WrappedComponent) => {
       const playerID = generateShortId();
 
       setState({ ...state, playerID });
+
+      onPlayerIdReady(playerID);
       //
       // The callback below gets called when the component is unmounted,
       // and by that time the `state` and `state.playerID` have been cleaned
@@ -273,6 +276,7 @@ export default (WrappedComponent) => {
         progressUpdateInterval={progressUpdateInterval}
         onFullscreenPlayerDidPresent={_onFullscreenPlayerDidPresent}
         onFullscreenPlayerDidDismiss={_onFullscreenPlayerDidDismiss}
+        onPlayerIdReady={onPlayerIdReady}
         source={source}
         ref={ref}
         {...otherProps}
