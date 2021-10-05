@@ -4961,15 +4961,15 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mux-embed@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/mux-embed/-/mux-embed-4.1.1.tgz#d61c297c6043c59793ec1837b778b294d60a66cd"
-  integrity sha512-AUjuWWRrKJ8byyd4vrZvLrA8yQGV3eoZ70u9n0HvA8AdY67xt+YBEAQbh5TYHEKfXLf1WpZlB9UScjgegUkrbQ==
+mux-embed@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/mux-embed/-/mux-embed-4.2.0.tgz#16712aadacae9fc9d96a4d3d1913f7bd43564af7"
+  integrity sha512-ECiXs/GY8R2whjE+lyIoCeK5fDVizv4TZjX5nybjgSLGjtLELLCHzLLVPMfQn75v5oCqnY6rH9RUZWanCguFnA==
 
 "mux-react-native-video-sdk@file:..":
-  version "0.1.0"
+  version "0.2.0"
   dependencies:
-    mux-embed "^4.1.1"
+    mux-embed "^4.2.0"
 
 nan@^2.12.1:
   version "2.14.2"
@@ -6763,9 +6763,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 ua-parser-js@^0.7.18:
-  version "0.7.22"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.22.tgz#960df60a5f911ea8f1c818f3747b99c6e177eae3"
-  integrity sha512-YUxzMjJ5T71w6a8WWVcMGM6YWOTX27rCoIQgLXiWaxqXSx9D7DNjiGWn1aJIRSQ5qr0xuhra77bSIh6voR/46Q==
+  version "0.7.28"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
+  integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
 
 uglify-es@^3.1.9:
   version "3.3.9"
