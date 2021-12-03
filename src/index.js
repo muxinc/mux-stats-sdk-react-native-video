@@ -41,17 +41,16 @@ export default (WrappedComponent) => {
     const didStartPaused = otherProps.paused;
 
     const stateRef = React.useRef({ playerID: generateShortId() });
-    const { playerID } = stateRef.current;
-    const saveStateForPlayer = (playerID, key, value) => {
+    const saveStateForPlayer = (key, value) => {
       stateRef.current[key] = value;
     };
 
-    const getStateForPlayer = (playerID, key, value) => {
+    const getStateForPlayer = (key) => {
       return stateRef.current[key];
     };
 
     const emit = (eventType, data) => {
-      mux.emit(playerID, eventType, data);
+      mux.emit(stateRef.current.playerID, eventType, data);
     };
 
     const emitPlay = () => {
@@ -59,11 +58,11 @@ export default (WrappedComponent) => {
       emit('play');
     };
 
-    const setPlayerStatus = (status) => saveStateForPlayer(playerID, 'currentStatus', status);
-    const getPlayerStatus = () => getStateForPlayer(playerID, 'currentStatus');
+    const setPlayerStatus = (status) => saveStateForPlayer('currentStatus', status);
+    const getPlayerStatus = () => getStateForPlayer('currentStatus');
 
     const _onProgress = evt => {
-      saveStateForPlayer(playerID, 'currentTime', secondsToMs(evt.currentTime));
+      saveStateForPlayer('currentTime', secondsToMs(evt.currentTime));
       if (getPlayerStatus() === 'paused') {
         return;
       }
@@ -88,7 +87,7 @@ export default (WrappedComponent) => {
 
     const _onLoad = evt => {
       if (evt.duration) {
-        saveStateForPlayer(playerID, 'duration', secondsToMs(evt.duration));
+        saveStateForPlayer('duration', secondsToMs(evt.duration));
       }
       if (evt.naturalSize) {
         //
@@ -99,21 +98,21 @@ export default (WrappedComponent) => {
         // https://github.com/react-native-community/react-native-video/issues/1194
         //
         if (evt.naturalSize.width && evt.naturalSize.width !== 'undefined') {
-          saveStateForPlayer(playerID, 'sourceWidth', evt.naturalSize.width);
+          saveStateForPlayer('sourceWidth', evt.naturalSize.width);
         }
         if (evt.naturalSize.height && evt.naturalSize.height !== 'undefined') {
-          saveStateForPlayer(playerID, 'sourceHeight', evt.naturalSize.height);
+          saveStateForPlayer('sourceHeight', evt.naturalSize.height);
         }
       }
       onLoad(evt);
     };
 
     const _onPlaybackRateChange = evt => {
-      const lastRate = getStateForPlayer(playerID, 'lastRateChange');
+      const lastRate = getStateForPlayer('lastRateChange');
       const newRate = evt.playbackRate;
       const isFirstPlayAttempt = (didStartPaused && lastRate === undefined && newRate);
       const isUnPausing = (lastRate === 0 && newRate);
-      saveStateForPlayer(playerID, 'lastRateChange', evt.playbackRate);
+      saveStateForPlayer('lastRateChange', evt.playbackRate);
 
       if (lastRate === newRate) {
         onPlaybackRateChange(evt);
@@ -135,19 +134,18 @@ export default (WrappedComponent) => {
     };
 
     const _onFullscreenPlayerDidPresent = evt => {
-      saveStateForPlayer(playerID, 'isFullscreen', true);
+      saveStateForPlayer('isFullscreen', true);
       onFullscreenPlayerDidPresent(evt);
     };
 
     const _onFullscreenPlayerDidDismiss = evt => {
-      saveStateForPlayer(playerID, 'isFullscreen', false);
+      saveStateForPlayer('isFullscreen', false);
       onFullscreenPlayerDidDismiss(evt);
     };
 
     useEffect(() => {
-      if (!playerID) return;
       options.getPlayheadTime = () => {
-        return getStateForPlayer(playerID, 'currentTime');
+        return getStateForPlayer('currentTime');
       };
 
       options.minimumRebufferDuration = MIN_REBUFFER_DURATION;
@@ -159,7 +157,7 @@ export default (WrappedComponent) => {
       options.data = assign(
         {
           player_software_name: 'React native video',
-          player_is_paused: getStateForPlayer(playerID, 'isPaused'),
+          player_is_paused: getStateForPlayer('isPaused'),
           // player_software_version: player.constructor.version, // TODO
           player_mux_plugin_name: 'react-native-video-mux',
           player_mux_plugin_version: lib.version
@@ -171,20 +169,20 @@ export default (WrappedComponent) => {
         return {
           // Required properties - these must be provided every time this is called
           // You _should_ only provide these values if they are defined (i.e. not 'undefined')
-          player_is_paused: getStateForPlayer(playerID, 'isPaused'),
-          // player_width: getStateForPlayer(playerID, 'playerWidth'),
-          // player_height: getStateForPlayer(playerID, 'playerHeight'),
-          video_source_height: getStateForPlayer(playerID, 'sourceWidth'),
-          video_source_width: getStateForPlayer(playerID, 'sourceHeight'),
+          player_is_paused: getStateForPlayer('isPaused'),
+          // player_width: getStateForPlayer('playerWidth'),
+          // player_height: getStateForPlayer('playerHeight'),
+          video_source_height: getStateForPlayer('sourceWidth'),
+          video_source_width: getStateForPlayer('sourceHeight'),
 
           // Preferred properties - these should be provided in this callback if possible
           // If any are missing, that is okay, but this will be a lack of data for the customer at a later time
-          player_is_fullscreen: getStateForPlayer(playerID, 'isFullscreen'),
+          player_is_fullscreen: getStateForPlayer('isFullscreen'),
           player_autoplay_on: !otherProps.paused,
           // player_preload_on: isPreload(),
           video_source_url: source && source.uri,
           // video_source_mime_type: getMimeType(),
-          video_source_duration: getStateForPlayer(playerID, 'duration'),
+          video_source_duration: getStateForPlayer('duration'),
 
           // Optional properties - if you have them, send them, but if not, no big deal
           video_poster_url: otherProps.poster
@@ -208,27 +206,27 @@ export default (WrappedComponent) => {
         options.platform.version = platformVersion;
       }
 
-      mux.init(playerID, options);
+      mux.init(stateRef.current.playerID, options);
       if (!didStartPaused) {
         emitPlay();
       }
 
       return () => {
-        mux.emit(playerID, 'destroy');
+        emit('destroy');
       };
     }, []);
 
     const sourceUri = source && source.uri;
     useEffect(() => {
-      if (!sourceUri || !playerID) return;
+      if (!sourceUri) return;
 
-      if (!getStateForPlayer(playerID, 'sourceUri')) {
+      if (!getStateForPlayer('sourceUri')) {
         // do not send a videochange event for the first source
-        saveStateForPlayer(playerID, 'sourceUri', sourceUri);
+        saveStateForPlayer('sourceUri', sourceUri);
         return;
       }
 
-      saveStateForPlayer(playerID, 'sourceUri', sourceUri);
+      saveStateForPlayer('sourceUri', sourceUri);
       emit('videochange', {
         video_id: options.data.video_id,
         video_title: options.data.video_title,
@@ -237,7 +235,7 @@ export default (WrappedComponent) => {
         video_stream_type: options.data.video_stream_type,
         video_encoding_variant: options.data.video_encoding_variant,
       });
-    }, [playerID, sourceUri]);
+    }, [sourceUri]);
 
     return (
       <WrappedComponent
