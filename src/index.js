@@ -15,23 +15,6 @@ const generateShortId = function () {
     .slice(-6);
 };
 
-/*
- *  I wanted to save the playerState in the component's
- *  React state with `setState`. That does not work because the
- *  onProgress event fires so frequently that calling setState() inside
- *  of that callback results in this error: React Native: Maximum update depth exceeded
-*/
-const playerState = {};
-
-const saveStateForPlayer = (playerID, key, value) => {
-  playerState[playerID] = playerState[playerID] || {};
-  playerState[playerID][key] = value;
-};
-
-const getStateForPlayer = (playerID, key, value) => {
-  return playerState[playerID] && playerState[playerID][key];
-};
-
 export default (WrappedComponent) => {
   return React.forwardRef(({
     onProgress = noop,
@@ -55,9 +38,17 @@ export default (WrappedComponent) => {
       progressUpdateInterval = 250;
     }
 
-    const [state, setState] = useState({ playerID: null });
-    const { playerID } = state;
     const didStartPaused = otherProps.paused;
+
+    const stateRef = React.useRef({ playerID: generateShortId() });
+    const { playerID } = stateRef.current;
+    const saveStateForPlayer = (playerID, key, value) => {
+      stateRef.current[key] = value;
+    };
+
+    const getStateForPlayer = (playerID, key, value) => {
+      return stateRef.current[key];
+    };
 
     const emit = (eventType, data) => {
       mux.emit(playerID, eventType, data);
@@ -65,8 +56,8 @@ export default (WrappedComponent) => {
 
     const emitPlay = () => {
       setPlayerStatus('play');
-      emit('play')
-    }
+      emit('play');
+    };
 
     const setPlayerStatus = (status) => saveStateForPlayer(playerID, 'currentStatus', status);
     const getPlayerStatus = () => getStateForPlayer(playerID, 'currentStatus');
@@ -74,7 +65,7 @@ export default (WrappedComponent) => {
     const _onProgress = evt => {
       saveStateForPlayer(playerID, 'currentTime', secondsToMs(evt.currentTime));
       if (getPlayerStatus() === 'paused') {
-        return
+        return;
       }
 
       if (getPlayerStatus() === 'play') {
@@ -132,7 +123,7 @@ export default (WrappedComponent) => {
       if (isFirstPlayAttempt || isUnPausing) {
         emitPlay();
         onPlaybackRateChange(evt);
-        return
+        return;
       }
 
       if (newRate === 0) {
@@ -152,25 +143,6 @@ export default (WrappedComponent) => {
       saveStateForPlayer(playerID, 'isFullscreen', false);
       onFullscreenPlayerDidDismiss(evt);
     };
-
-    useEffect(() => {
-      const playerID = generateShortId();
-
-      setState({ ...state, playerID });
-      //
-      // The callback below gets called when the component is unmounted,
-      // and by that time the `state` and `state.playerID` have been cleaned
-      // up, so the `playerID` variable will be `null`. For that reason,
-      // let's cache the playerID in a local variable, `playerIDCopy` and use
-      // it to emit the 'destroy' event.
-      //
-      const playerIDCopy = playerID;
-
-      return () => {
-        mux.emit(playerIDCopy, 'destroy');
-        delete playerState.playerID;
-      };
-    }, []);
 
     useEffect(() => {
       if (!playerID) return;
@@ -240,12 +212,16 @@ export default (WrappedComponent) => {
       if (!didStartPaused) {
         emitPlay();
       }
-    }, [playerID]);
+
+      return () => {
+        mux.emit(playerID, 'destroy');
+      };
+    }, []);
 
     const sourceUri = source && source.uri;
     useEffect(() => {
       if (!sourceUri || !playerID) return;
-      
+
       if (!getStateForPlayer(playerID, 'sourceUri')) {
         // do not send a videochange event for the first source
         saveStateForPlayer(playerID, 'sourceUri', sourceUri);

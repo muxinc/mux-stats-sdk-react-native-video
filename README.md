@@ -33,7 +33,7 @@ For more information about what keys can be passed into the `data` key in the `m
 
 ```jsx
 import app from './package.json' // this is your application's package.json
-import Video from 'react-native-video'; // import Video from react-native-video like your normally would
+import Video from 'react-native-video'; // import Video from react-native-video like you normally would
 import muxReactNativeVideo from 'mux-react-native-video-sdk';
 
 // wrap the `Video` component with Mux functionality
