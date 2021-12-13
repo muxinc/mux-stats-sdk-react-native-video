@@ -11,10 +11,10 @@
     "react-native": "react-native"
   },
   "dependencies": {
+    "mux-react-native-video-sdk": "file:../",
     "react": "16.9.0",
-    "react-native": "0.61.5",
-    "react-native-video": "^5.0.2",
-    "mux-react-native-video-sdk": "file:../"
+    "react-native": "^0.66.4",
+    "react-native-video": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
