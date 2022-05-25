@@ -1,5 +1,5 @@
 import mux from 'mux-embed';
-import React, { useEffect, useState } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useEffect, useImperativeHandle } from 'react'; // eslint-disable-line no-unused-vars
 import { Platform } from 'react-native';
 import lib from '../package.json';
 const secondsToMs = mux.utils.secondsToMs;
@@ -60,6 +60,10 @@ export default (WrappedComponent) => {
 
     const setPlayerStatus = (status) => saveStateForPlayer('currentStatus', status);
     const getPlayerStatus = () => getStateForPlayer('currentStatus');
+
+    useImperativeHandle(ref, () => ({
+      mux: () => ({ emit })
+    }));
 
     const _onProgress = evt => {
       saveStateForPlayer('currentTime', secondsToMs(evt.currentTime));
