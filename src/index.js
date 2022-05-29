@@ -1,5 +1,5 @@
 import mux from 'mux-embed';
-import React, { useEffect, useState } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useEffect, useImperativeHandle } from 'react';
 import { Platform } from 'react-native';
 import lib from '../package.json';
 const secondsToMs = mux.utils.secondsToMs;
@@ -30,6 +30,7 @@ export default (WrappedComponent) => {
     ...otherProps
   }, ref) => {
     const options = Object.assign({}, muxOptions);
+
     if (!options.application_name) {
       console.error('[mux-react-native-video] missing muxOptions.application_name - this value is required');
     }
@@ -60,6 +61,10 @@ export default (WrappedComponent) => {
 
     const setPlayerStatus = (status) => saveStateForPlayer('currentStatus', status);
     const getPlayerStatus = () => getStateForPlayer('currentStatus');
+
+    useImperativeHandle(ref, () => ({
+      mux: { emit }
+    }));
 
     const _onProgress = evt => {
       saveStateForPlayer('currentTime', secondsToMs(evt.currentTime));
@@ -112,6 +117,7 @@ export default (WrappedComponent) => {
       const newRate = evt.playbackRate;
       const isFirstPlayAttempt = (didStartPaused && lastRate === undefined && newRate);
       const isUnPausing = (lastRate === 0 && newRate);
+
       saveStateForPlayer('lastRateChange', evt.playbackRate);
 
       if (lastRate === newRate) {
@@ -129,7 +135,6 @@ export default (WrappedComponent) => {
         emit('pause');
         setPlayerStatus('paused');
         onPlaybackRateChange(evt);
-        return;
       }
     };
 
@@ -150,8 +155,11 @@ export default (WrappedComponent) => {
 
       options.minimumRebufferDuration = MIN_REBUFFER_DURATION;
       const platformName = options.application_name;
+
       delete options.application_name;
+
       const platformVersion = options.application_version;
+
       delete options.application_version;
 
       options.data = assign(
@@ -217,6 +225,7 @@ export default (WrappedComponent) => {
     }, []);
 
     const sourceUri = source && source.uri;
+
     useEffect(() => {
       if (!sourceUri) return;
 
@@ -233,7 +242,7 @@ export default (WrappedComponent) => {
         video_series: options.data.video_series,
         video_duration: options.data.video_duration,
         video_stream_type: options.data.video_stream_type,
-        video_encoding_variant: options.data.video_encoding_variant,
+        video_encoding_variant: options.data.video_encoding_variant
       });
     }, [sourceUri]);
 
