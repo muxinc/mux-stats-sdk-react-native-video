@@ -1,6 +1,6 @@
 {
   "name": "mux-react-native-video-sdk",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": "Mux, Inc.",
   "description": "Mux analytics plugin for react-native-video",
   "homepage": "https://github.com/muxinc/mux-stats-sdk-react-native-video",
