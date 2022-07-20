@@ -63,10 +63,7 @@ export default (WrappedComponent) => {
     const setPlayerStatus = (status) => saveStateForPlayer('currentStatus', status);
     const getPlayerStatus = () => getStateForPlayer('currentStatus');
 
-    useImperativeHandle(ref, () => ({
-      ...videoRef.current,
-      mux: { emit }
-    }));
+    useImperativeHandle(ref, () => Object.assign(videoRef.current, { mux: { emit } }));
 
     const _onProgress = evt => {
       saveStateForPlayer('currentTime', secondsToMs(evt.currentTime));
