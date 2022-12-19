@@ -1,5 +1,5 @@
 import mux from 'mux-embed';
-import React, { useEffect, useImperativeHandle } from 'react';
+import React, { useEffect, useImperativeHandle, useRef } from 'react';
 import { Platform } from 'react-native';
 import lib from '../package.json';
 const secondsToMs = mux.utils.secondsToMs;
@@ -29,6 +29,7 @@ export default (WrappedComponent) => {
     source,
     ...otherProps
   }, ref) => {
+    const videoRef = useRef();
     const options = Object.assign({}, muxOptions);
 
     if (!options.application_name) {
@@ -62,9 +63,7 @@ export default (WrappedComponent) => {
     const setPlayerStatus = (status) => saveStateForPlayer('currentStatus', status);
     const getPlayerStatus = () => getStateForPlayer('currentStatus');
 
-    useImperativeHandle(ref, () => ({
-      mux: { emit }
-    }));
+    useImperativeHandle(ref, () => Object.assign(videoRef.current, { mux: { emit } }));
 
     const _onProgress = evt => {
       saveStateForPlayer('currentTime', secondsToMs(evt.currentTime));
@@ -257,7 +256,7 @@ export default (WrappedComponent) => {
         onFullscreenPlayerDidPresent={_onFullscreenPlayerDidPresent}
         onFullscreenPlayerDidDismiss={_onFullscreenPlayerDidDismiss}
         source={source}
-        ref={ref}
+        ref={videoRef}
         {...otherProps}
       />
     );
