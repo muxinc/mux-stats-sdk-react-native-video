@@ -1,7 +1,9 @@
-import mux from 'mux-embed';
-import React, { useEffect, useImperativeHandle, useRef } from 'react';
+import React from 'react';
 import { Platform } from 'react-native';
+import mux from 'mux-embed';
+
 import lib from '../package.json';
+
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
 
@@ -29,7 +31,7 @@ export default (WrappedComponent) => {
     source,
     ...otherProps
   }, ref) => {
-    const videoRef = useRef();
+    const videoRef = React.useRef();
     const options = Object.assign({}, muxOptions);
 
     if (!options.application_name) {
@@ -63,7 +65,7 @@ export default (WrappedComponent) => {
     const setPlayerStatus = (status) => saveStateForPlayer('currentStatus', status);
     const getPlayerStatus = () => getStateForPlayer('currentStatus');
 
-    useImperativeHandle(ref, () => Object.assign(videoRef.current, { mux: { emit } }));
+    React.useImperativeHandle(ref, () => Object.assign(videoRef.current, { mux: { emit } }));
 
     const _onProgress = evt => {
       saveStateForPlayer('currentTime', secondsToMs(evt.currentTime));
@@ -147,7 +149,7 @@ export default (WrappedComponent) => {
       onFullscreenPlayerDidDismiss(evt);
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
       options.getPlayheadTime = () => {
         return getStateForPlayer('currentTime');
       };
@@ -225,7 +227,7 @@ export default (WrappedComponent) => {
 
     const sourceUri = source && source.uri;
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (!sourceUri) return;
 
       if (!getStateForPlayer('sourceUri')) {
