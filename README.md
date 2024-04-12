@@ -1,3 +1,7 @@
+# THIS REPOSITORY HAS BEEN ARCHIVED
+
+As part of a reorganization of our SDK projects, this repository has been moved to an internal repository. The package is still updated regularly, and you can keep track up releases in our [public documentation](https://docs.mux.com/guides/monitor-react-native-video).
+
 # Mux Data Integration with react-native-video
 
 This is a package for using [Mux Data](https://mux.com/data/) for video QoS monitoring with a react-native-video player.
