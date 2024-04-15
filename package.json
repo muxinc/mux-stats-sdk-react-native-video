@@ -18,8 +18,8 @@
     "eslint-plugin-standard": "^4.0.1"
   },
   "peerDependencies": {
-    "react": "^16.9",
-    "react-native-video": "^5.0"
+    "react": ">=16.9.0",
+    "react-native-video": ">=6.0"
   },
   "dependencies": {
     "mux-embed": "^4.9.1"
